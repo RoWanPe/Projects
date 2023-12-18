@@ -68,11 +68,11 @@ elif vyber.isdigit(): # overeni jestli je text cislo
 if cislo_in in range(1,4): # jestli cislo je v rozsahu 1-3
         vybrany_text = TEXTS[cislo_in - 1]
         slova = vybrany_text.split()
-        cista_cisla = [cislo for cislo in vybrany_text.split() if cislo.isdigit()]   # vytvoren seznam , pouze s čísly 
-        ciste_slovo = [bezcisel for bezcisel in vybrany_text.split() if bezcisel.isalpha()] # seznam pouze se slovy . bez číšel .
-        velke_pismeno = [velke_p for velke_p in ciste_slovo if velke_p.istitle()] # seznam  obsahujici slova zacinajicim velky Pismenem
-        velke_slovo = [slovo_big for slovo_big in vybrany_text.split() if slovo_big.isupper()] # seznam obsahujici pouze slova napsáná Velkymi PISMENY 
-        male_pismeno = [male_p for male_p in vybrany_text.split() if male_p.islower()] # seznam obsahujici slova psané malými písmeny
+        cista_cisla = [cislo for cislo in vybrany_text.split() if cislo.isdigit()]   # vytvoren seznam , pouze s čísly ,iterace
+        ciste_slovo = [bezcisel for bezcisel in vybrany_text.split() if bezcisel.isalpha()] # seznam pouze se slovy . bez číšel .Iterace
+        velke_pismeno = [velke_p for velke_p in ciste_slovo if velke_p.istitle()] # seznam  obsahujici slova zacinajicim velky Pismenem Iterace
+        velke_slovo = [slovo_big for slovo_big in vybrany_text.split() if slovo_big.isupper()] # seznam obsahujici pouze slova napsáná Velkymi PISMENY Iterace
+        male_pismeno = [male_p for male_p in vybrany_text.split() if male_p.islower()] # seznam obsahujici slova psané malými písmeny Iterace
         soucet = sum(int(num) for num in cista_cisla) # soucet všech nalezených čísel a jejich součet.
      #výpis hodnot
         print(f"There are {len(ciste_slovo)} words in the selected text")
