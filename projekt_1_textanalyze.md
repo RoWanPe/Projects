@@ -1,0 +1,1 @@
+První projekt Textový analyzátor .
