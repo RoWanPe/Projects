@@ -37,16 +37,16 @@ garpike and stingray are also present.'''
 ]
 
 
-registered_users = {"bob": "123", "ann": "pass123", "mike": "password123", "liz": "pass123"} #registrovaní uživatélé
+registrovany_uziv = {"bob": "123", "ann": "pass123", "mike": "password123", "liz": "pass123"} #registrovaní uživatélé
 
 
-username = input("Username: ")
+uzivatel = input("Username: ")
 #vstup od uživatele , Jméno a heslo
-password = input("Password: ")
+heslo = input("Password: ")
 
 #oveření jestli uživatelův vstup (user,pass) je v registrovanych a zda zadane heslo se nachazi u uzivatele, ke kterému bylo ve slovniku prirazeno
-if username in registered_users and password == registered_users[username]:
-    print("welcome to the app,", username.capitalize(),"!","\n" "We hawe 3 text to be analyzed.")
+if uzivatel in registrovany_uziv and heslo == registrovany_uziv[uzivatel]:
+    print("welcome to the app,", uzivatel.capitalize(),"!","\n" "We hawe 3 text to be analyzed.")
 #pri zadani jineho vstupu nez je v registrovanych , vypise text a ukončí se .
 else:
     print("unregistered user, terminating the program..")
@@ -63,50 +63,64 @@ if vyber.isalpha():
     quit()
 
 elif vyber.isdigit(): # overeni jestli je text cislo
-    cislo_in = int(vyber)
+    vyber_cislo = int(vyber)
     
-if cislo_in in range(1,4): # jestli cislo je v rozsahu 1-3
-        vybrany_text = TEXTS[cislo_in - 1]
-        slova = vybrany_text.split()
-        cista_cisla = [cislo for cislo in vybrany_text.split() if cislo.isdigit()]   # vytvoren seznam , pouze s čísly ,iterace
-        ciste_slovo = [bezcisel for bezcisel in vybrany_text.split() if bezcisel.isalpha()] # seznam pouze se slovy . bez číšel .Iterace
-        velke_pismeno = [velke_p for velke_p in ciste_slovo if velke_p.istitle()] # seznam  obsahujici slova zacinajicim velky Pismenem Iterace
-        velke_slovo = [slovo_big for slovo_big in vybrany_text.split() if slovo_big.isupper()] # seznam obsahujici pouze slova napsáná Velkymi PISMENY Iterace
-        male_pismeno = [male_p for male_p in vybrany_text.split() if male_p.islower()] # seznam obsahujici slova psané malými písmeny Iterace
-        soucet = sum(int(num) for num in cista_cisla) # soucet všech nalezených čísel a jejich součet.
-     #výpis hodnot
-        print(f"There are {len(ciste_slovo)} words in the selected text")
-        print(f"There are {len(velke_pismeno)} titlecase words. ")
-        print(f"There are {len(velke_slovo)} uppercase words.")
-        print(f"There are {len(male_pismeno)} lowercase words.")
-        print(f"There are {len(cista_cisla)} numeric strigs.") 
-        print(f"The sum of all the numbers {soucet}")       
-        print(oddelovac)
+if vyber_cislo in range(1,4): # jestli cislo je v rozsahu 1-3
+    vybrany_text = TEXTS[vyber_cislo - 1]
         
-        delka_cista_slova = {}
-         # iterace vyskytu slov 
-        for slovo in ciste_slovo:
-            delka = len(slovo)
-            if delka in delka_cista_slova:
-                 delka_cista_slova[delka] += 1
-                 
-            else:
-                 delka_cista_slova[delka] = 1
+    # seznamy pro iteraci nize. 
+    slova, velky_slovo, velky_pismeno, male_slovo, cisla = [], [], [], [], []
+    #iterace pro analyzu textu . zmena z komprehenze , na samostatný for cyklus s podmínkami.
+    for slovo in vybrany_text.split():
+        ciste_slovo = slovo.strip(",.!?-") # odstraneni znaku 
+        
+        if ciste_slovo.isdigit(): # pokud je cislo
+            cisla.append(ciste_slovo) # prida do seznamu cisla
+        slova.append(ciste_slovo)  # ulozi vsechno rozdelene do seznamu slova         
+        
+        if ciste_slovo.istitle():   # pokud slovo zacina velkym Pismenem, 
+            velky_pismeno.append(ciste_slovo)   # prida do seznamu velky_pismeno
+            
+        if ciste_slovo.isalpha() and ciste_slovo.isupper(): # pokud slovo obsahuje pouze pismena a je psano velkymi pismeny 
+            velky_slovo.append(ciste_slovo) # prida do seznamu velky_slovo
                 
+        if ciste_slovo.islower(): # pokud je slovo psano malymi pismeny
+            male_slovo.append(ciste_slovo) # pridej do seznamu male_slovo
         
-        hlavicka ="LEN|  OCCURENCES  |NR." 
+    # iterace pro soucet cisel podle vyberu   
+    soucet = 0
+    for cislo in cisla:
+        soucet += int(cislo)
+                
+    #výpis hodnot
+    print(f"There are {len(slova)} words in the selected text")
+    print(f"There are {len(velky_pismeno)} titlecase words. ")
+    print(f"There are {len(velky_slovo)} uppercase words.")
+    print(f"There are {len(male_slovo)} lowercase words.")
+    print(f"There are {len(cisla)} numeric strigs.") 
+    print(f"The sum of all the numbers {soucet}")       
+    print(oddelovac)
+    
+    delka_cista_slova = {}
+    # iterace vyskytu slov 
+    for pocet in slova:
+        delka = len(pocet)
+            
+        if delka in delka_cista_slova:
+            delka_cista_slova[delka] += 1
+                
+        else:
+            delka_cista_slova[delka] = 1
+    
+                    
+    hlavicka ="LEN|    OCCURENCES    |NR." 
+    print(hlavicka,oddelovac, sep="\n") 
         
-        print(hlavicka,oddelovac, sep="\n") 
-        #serazeni vyskytu slov a vloženi do grafu
-        for key, values in sorted(delka_cista_slova.items()):
-            zobrazeni = "*" * values
-            print(f" {key:<2}|{zobrazeni:<14}|{values:<1}") #:< sirka pole pro danou hodnotu. serazeni
-            
-            
+    #serazeni vyskytu slov a vloženi do grafu
+    for delka, pocet in sorted(delka_cista_slova.items()):
+        zobrazeni = "*" * pocet
+        print(f" {delka:<2}|{zobrazeni:<18}|{pocet:<1}") #:< sirka pole pro danou hodnotu. serazeni
             
 else:
-         print("wrong numbers! only 1-3 ")
-         quit()
-    
-
-        
+    print("wrong numbers! only 1-3 ")
+    quit()     
